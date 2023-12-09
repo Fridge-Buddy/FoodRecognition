@@ -2,7 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import BarcodeScan from './Components/BarcodeScan';
+import ScanPage from './Components/Scan/ScanPage';
 
 const Tab = createBottomTabNavigator();
 
@@ -11,7 +11,7 @@ export default function App() {
     <NavigationContainer>
       <Tab.Navigator>
         <Tab.Screen name="Home" component={HomeScreen} />
-        <Tab.Screen name="Scan" component={BarcodeScan} />
+        <Tab.Screen name="Scan" component={ScanPage} />
       </Tab.Navigator>
     </NavigationContainer>
   );
