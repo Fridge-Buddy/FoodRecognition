@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { StyleSheet } from 'react-native';
+import React, { useState, useEffect, useRef } from 'react';
+import { StyleSheet, Button } from 'react-native';
 import { Text, View } from '@/components/Themed';
 import { Camera } from 'expo-camera';
 import { useFocusEffect } from '@react-navigation/native';
 
-export default function smartscanner() {
+export default function SmartScanner() {
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
+  const cameraRef = useRef<Camera>(null);
 
   useFocusEffect(
     React.useCallback(() => {
@@ -20,6 +21,67 @@ export default function smartscanner() {
     }, [])
   );
 
+  const handleCapture = async () => {
+    if (cameraRef.current) {
+      let photo = await cameraRef.current.takePictureAsync({ base64: true });
+      console.log('Photo captured:', photo);
+  
+      // Prepare the image data to pass to the Clarifai API
+      const imageBase64 = photo.base64;
+      const clarifaiRequestBody = JSON.stringify({
+        "inputs": [
+          {
+            "data": {
+              "image": {
+                "base64": imageBase64
+              }
+            }
+          }
+        ]
+      });
+  
+      // Make the API request to Clarifai
+      fetchClarifaiAPI(clarifaiRequestBody);
+    }
+  };
+  
+  const fetchClarifaiAPI = (requestData: string) => {
+    const PAT = 'b0cfb19838e1432e8453961933c40cb5'; // Replace with your Clarifai PAT
+    const MODEL_ID = 'food-item-recognition'; // Replace with your Clarifai model ID
+    const MODEL_VERSION_ID = '1d5fd481e0cf4826aa72ec3ff049e044'; // Replace with your Clarifai model version ID
+  
+    const requestOptions = {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Authorization': 'Key ' + PAT
+      },
+      body: requestData
+    };
+  
+    fetch(`https://api.clarifai.com/v2/models/${MODEL_ID}/versions/${MODEL_VERSION_ID}/outputs`, requestOptions)
+    .then(response => response.json())
+    .then(result => {
+      // Extract prediction data from the response
+      const outputs = result.outputs;
+      if (outputs && outputs.length > 0) {
+        const prediction = outputs[0]; // Assuming there's only one prediction
+        const data = prediction.data;
+
+        // Log prediction details to the console
+        console.log('Prediction:');
+        console.log('Classes:', data.concepts.map(concept => concept.name).join(', ')); // Assuming concepts contain predicted classes
+        console.log('Probabilities:', data.concepts.map(concept => concept.value).join(', ')); // Assuming concepts contain probabilities
+      } else {
+        console.log('No prediction outputs found.');
+      }
+    })
+    .catch(error => console.error('Error:', error));
+  };
+  
+  
+  
+
   if (hasPermission === null) {
     return <View />;
   }
@@ -29,11 +91,11 @@ export default function smartscanner() {
 
   return (
     <View style={styles.container}>
-      <Camera style={styles.camera} />
+      <Camera style={styles.camera} ref={cameraRef} />
+      <Button title="Capture" onPress={handleCapture} />
     </View>
   );
 }
-
 
 const styles = StyleSheet.create({
   container: {
@@ -41,17 +103,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
-  },
   camera: {
+    flex: 1,
     width: '100%',
-    height: '100%',
   },
 });
