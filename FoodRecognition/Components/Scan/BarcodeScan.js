@@ -17,7 +17,7 @@ export default function BarcodeScan() {
     if (!scanned) {
       console.log(`Bar code with type ${type} and data ${data} has been scanned!`);
       setScanned(true);
-      setTimeout(() => setScanned(false), 3000); // 3 seconds delay
+      setTimeout(() => setScanned(false), 3000); // 3 seconds delay after each scan
     }
   };
 
