@@ -35,7 +35,7 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="smartscanner"
+        name="two"
         options={{
           title: 'Smart Scanner',
           tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,

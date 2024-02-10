@@ -4,7 +4,7 @@ import { Text, View } from '@/components/Themed';
 import { Camera } from 'expo-camera';
 import { useFocusEffect } from '@react-navigation/native';
 
-export default function barcodescanner() {
+export default function smartscanner() {
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
 
   useFocusEffect(
