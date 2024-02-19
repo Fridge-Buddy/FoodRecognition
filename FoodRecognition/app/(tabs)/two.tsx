@@ -46,9 +46,9 @@ export default function SmartScanner() {
   };
   
   const fetchClarifaiAPI = (requestData: string) => {
-    const PAT = 'XXXXXXXXXXXXXXXXXXXXXXX'; // Replace with Clarifai PAT
-    const MODEL_ID = 'food-item-recognition'; // Replace with Clarifai model ID
-    const MODEL_VERSION_ID = '1d5fd481e0cf4826aa72ec3ff049e044'; // Replace with Clarifai model version ID
+    const PAT = 'XXXXXXXXXXXXXXXXXXXXXXXXX'; // Replace with Clarifai PAT
+    const MODEL_ID = 'food-item-recognition'; //'ocr-scene-english-paddleocr'; // Replace with Clarifai model ID
+    const MODEL_VERSION_ID = '1d5fd481e0cf4826aa72ec3ff049e044'; //'46e99516c2d94f58baf2bcaf5a6a53a9'; // Replace with Clarifai model version ID
   
     const requestOptions = {
       method: 'POST',
@@ -59,6 +59,12 @@ export default function SmartScanner() {
       body: requestData
     };
   
+    /*fetch("https://api.clarifai.com/v2/models/" + MODEL_ID + "/versions/" + MODEL_VERSION_ID + "/outputs", requestOptions)
+    .then(response => response.text())
+    .then(result => console.log(result))
+    .catch(error => console.log('error', error));
+    */
+
     fetch(`https://api.clarifai.com/v2/models/${MODEL_ID}/versions/${MODEL_VERSION_ID}/outputs`, requestOptions)
     .then(response => response.json())
     .then(result => {
