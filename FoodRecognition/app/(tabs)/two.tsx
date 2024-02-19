@@ -23,7 +23,7 @@ export default function SmartScanner() {
 
   const handleCapture = async () => {
     if (cameraRef.current) {
-      let photo = await cameraRef.current.takePictureAsync({ base64: true });
+      let photo = await cameraRef.current.takePictureAsync({ base64: true, quality: 0.7 }); // adjust quality for efficiency
       console.log('Photo captured:', photo);
   
       // Prepare the image data to pass to the Clarifai API
@@ -46,7 +46,7 @@ export default function SmartScanner() {
   };
   
   const fetchClarifaiAPI = (requestData: string) => {
-    const PAT = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'; // Replace with your Clarifai PAT
+    const PAT = 'XXXXXXXXXXXXXXXXXXXXXXXXXXX'; // Replace with your Clarifai PAT
     const MODEL_ID = 'food-item-recognition'; // Replace with your Clarifai model ID
     const MODEL_VERSION_ID = '1d5fd481e0cf4826aa72ec3ff049e044'; // Replace with your Clarifai model version ID
   
