@@ -46,9 +46,9 @@ export default function SmartScanner() {
   };
   
   const fetchClarifaiAPI = (requestData: string) => {
-    const PAT = 'XXXXXXXXXXXXXXXXXXXXXXXXXXX'; // Replace with your Clarifai PAT
-    const MODEL_ID = 'food-item-recognition'; // Replace with your Clarifai model ID
-    const MODEL_VERSION_ID = '1d5fd481e0cf4826aa72ec3ff049e044'; // Replace with your Clarifai model version ID
+    const PAT = 'XXXXXXXXXXXXXXXXXXXXXXX'; // Replace with Clarifai PAT
+    const MODEL_ID = 'food-item-recognition'; // Replace with Clarifai model ID
+    const MODEL_VERSION_ID = '1d5fd481e0cf4826aa72ec3ff049e044'; // Replace with Clarifai model version ID
   
     const requestOptions = {
       method: 'POST',

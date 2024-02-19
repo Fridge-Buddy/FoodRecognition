@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { StyleSheet } from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, Button, Alert } from 'react-native';
 import { Text, View } from '@/components/Themed';
 import { Camera } from 'expo-camera';
 import { useFocusEffect } from '@react-navigation/native';
 
-export default function barcodescanner() {
+export default function BarcodeScanner() {
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
+  const [scanned, setScanned] = useState<boolean>(false);
 
   useFocusEffect(
     React.useCallback(() => {
@@ -20,6 +21,17 @@ export default function barcodescanner() {
     }, [])
   );
 
+  const handleBarCodeScanned = ({ type, data }: { type: any; data: any }) => {
+    setScanned(true);
+    console.log(`Bar code with type ${type} and data ${data} has been scanned!`);
+    // handle the scanned data
+    Alert.alert(
+      'Scan successful!',
+      `Bar code with type ${type} and data ${data} has been scanned!`,
+      [{ text: 'OK', onPress: () => setScanned(false) }]
+    );
+  };
+
   if (hasPermission === null) {
     return <View />;
   }
@@ -29,29 +41,23 @@ export default function barcodescanner() {
 
   return (
     <View style={styles.container}>
-      <Camera style={styles.camera} />
+      <Camera
+        style={styles.camera}
+        type={Camera.Constants.Type.back}
+        onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
+      />
+      {scanned && <Button title={'Tap to Scan Again'} onPress={() => setScanned(false)} />}
     </View>
   );
 }
 
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
+    flexDirection: 'column',
     justifyContent: 'center',
   },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
-  },
   camera: {
-    width: '100%',
-    height: '100%',
+    flex: 1,
   },
 });
